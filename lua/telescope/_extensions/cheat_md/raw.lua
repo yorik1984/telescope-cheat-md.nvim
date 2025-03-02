@@ -1,28 +1,21 @@
-local j = require "plenary.job"
-local scan = require "plenary.scandir"
-local sources = require "telescope._extensions.cheat_md.sources"
+local scan    = require("plenary.scandir")
+local sources = require("telescope._extensions.cheat_md.sources")
 local M = {}
 
 local extract_path = nil
 local __get
 
-local clone = function(uri, path, cb)
-    return j
-        :new({
-            command = "git",
-            args = { "clone", uri, path, "--depth=1" },
-            on_exit = function(_, code)
-                if code == 0 then
-                    return cb()
-                else
-                    error(string.format("%s couldn't be temporarily cloned", uri))
-                end
-            end,
-        })
-        :start()
+local function clone(uri, path, cb)
+    vim.system({ "git", "clone", uri, path, "--depth=1" }, { text = true }, function(obj)
+        if obj.code == 0 then
+            cb()
+        else
+            error(string.format("%s couldn't be temporarily cloned: %s", uri, obj.stderr))
+        end
+    end)
 end
 
-local get_source_path = function(cb, source)
+local function get_source_path(cb, source)
     local path = extract_path .. "/" .. source.name
     if vim.loop.fs_stat(path) == nil then
         local await = function()
@@ -34,28 +27,28 @@ local get_source_path = function(cb, source)
     end
 end
 
-local get_file_paths = function(cb, source)
+local function get_file_paths(cb, source)
     return get_source_path(function(path)
         return scan.scan_dir_async(path .. source.root, {
             search_pattern = source.pattern,
-            on_exit = cb,
-            depth = source.depth,
-            add_dirs = source.add_dirs,
+            on_exit        = cb,
+            depth          = source.depth,
+            add_dirs       = source.add_dirs,
         })
     end, source)
 end
 
-local extract_data = function(cb, source)
+local function extract_data(cb, source)
     return get_file_paths(
         vim.schedule_wrap(function(paths)
             local data = {}
             for i, path in ipairs(paths) do
                 local ns, keyword = source.get_ns_keyword(path)
                 data[i] = {
-                    source = source.name,
-                    ns = keyword and ns or source.ns,
+                    source  = source.name,
+                    ns      = keyword and ns or source.ns,
                     keyword = keyword and keyword or ns,
-                    ft = source.ft,
+                    ft      = source.ft,
                     content = source.parse(path),
                 }
             end
@@ -65,8 +58,8 @@ local extract_data = function(cb, source)
     )
 end
 
-__get = function(cb, lsources, data) -- conni <3
-    if table.getn(lsources) > 0 then
+function __get(cb, lsources, data)
+    if #lsources > 0 then
         local source = table.remove(lsources, 1)
         extract_data(function(res)
             for _, v in ipairs(res) do
@@ -80,7 +73,7 @@ __get = function(cb, lsources, data) -- conni <3
     end
 end
 
-M.get = function(cb)
+function M.get(cb)
     if extract_path then
         return
     end

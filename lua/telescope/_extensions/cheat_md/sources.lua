@@ -1,5 +1,6 @@
-local p = require "plenary.path"
+local p = require("plenary.path")
 local M = {}
+
 local parse = function(path)
     local content = p.readlines(path)
     if content[1]:find("---", 1, true) then
@@ -18,32 +19,32 @@ local parse = function(path)
     return table.concat(content, "\n")
 end
 
-M[2] = {
-    name = "learnxinyminutes",
-    uri = "https://github.com/adambard/learnxinyminutes-docs",
-    root = "",
-    depth = 1,
-    pattern = ".*%.html%.markdown",
-    add_dirs = false,
-    ft = "markdown",
-    parse = parse,
-    get_ns_keyword = function(path)
-        return "lang", path:match ".*/([^./]+).*"
-    end,
+local function get_ns_keyword(path)
+    return "lang", path:match ".*/([^./]+).*"
+end
+
+M[1] = {
+    name           = "learnX",
+    uri            = "https://github.com/adambard/learnxinyminutes-docs",
+    root           = "",
+    depth          = 2,
+    pattern        = "%.md",
+    add_dirs       = false,
+    ft             = "markdown",
+    parse          = parse,
+    get_ns_keyword = get_ns_keyword,
 }
 
-M[4] = {
-    name = "rstacruz-cheatsheets",
-    uri = "https://github.com/rstacruz/cheatsheets",
-    root = "",
-    depth = 1,
-    pattern = "%.md",
-    add_dirs = false,
-    ft = "markdown",
-    parse = parse,
-    get_ns_keyword = function(path)
-        return "lang", path:match ".*/([^./]+).*"
-    end,
+M[2] = {
+    name           = "cheatsheets",
+    uri            = "https://github.com/rstacruz/cheatsheets",
+    root           = "",
+    depth          = 1,
+    pattern        = "%.md",
+    add_dirs       = false,
+    ft             = "markdown",
+    parse          = parse,
+    get_ns_keyword = get_ns_keyword,
 }
 
 return M
