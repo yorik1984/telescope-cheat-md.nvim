@@ -1,6 +1,6 @@
-local scan    = require("plenary.scandir")
-local sources = require("telescope._extensions.cheat_md.sources")
-local M = {}
+local scan         = require("plenary.scandir")
+local sources      = require("telescope._extensions.cheat_md.sources")
+local M            = {}
 
 local extract_path = nil
 local __get
@@ -17,8 +17,8 @@ end
 
 local function get_source_path(cb, source)
     local path = extract_path .. "/" .. source.name
-    if vim.loop.fs_stat(path) == nil then
-        local await = function()
+    if vim.fn.isdirectory(path) == 0 then
+        local function await()
             cb(path)
         end
         clone(source.uri, path, await)

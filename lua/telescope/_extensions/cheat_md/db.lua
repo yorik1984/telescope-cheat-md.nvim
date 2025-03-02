@@ -86,8 +86,8 @@ function data:recache(cb)
 end
 
 function data:ensure(cb)
-    if not vim.loop.fs_stat(dbdir) then
-        vim.loop.fs_mkdir(dbdir, 493)
+    if vim.fn.isdirectory(dbdir) == 0 then
+        vim.fn.mkdir(dbdir, "p")
     end
 
     local up_to_date = state:is_up_to_date()

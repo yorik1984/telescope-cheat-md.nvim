@@ -6,18 +6,18 @@ local putils        = require("telescope.previewers.utils")
 local actions       = require("telescope.actions")
 local entry_display = require("telescope.pickers.entry_display")
 
-local cheat_fd      = function(opts)
+local function cheat_fd(opts)
     opts = opts or {}
 
     if not opts.data or #opts.data == 0 then
         return
     end
 
-    local concat_entry_name = function(entry)
+    local function concat_entry_name(entry)
         return entry.value.ns .. "/" .. entry.value.keyword
     end
 
-    local entry_maker = function(entry)
+    local function entry_maker(entry)
         local displayer = entry_display.create {
             separator = " ",
             hl_chars = { ["|"] = "Delimiter" },
@@ -27,7 +27,7 @@ local cheat_fd      = function(opts)
             },
         }
 
-        local make_display = function(entry)
+        local function make_display(entry)
             return displayer {
                 { entry.value.keyword, "Directory" },
                 { entry.value.ns,      "Type" },

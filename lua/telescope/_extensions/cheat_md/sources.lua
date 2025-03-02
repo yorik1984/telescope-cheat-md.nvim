@@ -1,7 +1,7 @@
 local p = require("plenary.path")
 local M = {}
 
-local parse = function(path)
+local function parse(path)
     local content = p.readlines(path)
     if content[1]:find("---", 1, true) then
         local minus_count = 0
