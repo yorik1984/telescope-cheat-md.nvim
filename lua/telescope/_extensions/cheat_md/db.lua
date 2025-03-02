@@ -1,26 +1,27 @@
-local raw = require "telescope._extensions.cheat.raw"
+local raw = require "telescope._extensions.cheat_md.raw"
 local sqlite = require "sqlite"
 
-local VERSION = 0.1 -- should be incremented when sources/presentation/parsing changes.
+local VERSION = 0.1
 
-local dbdir = vim.fn.stdpath "data" .. "/databases"
+local name  = "telescope-cheat-md"
+local dbdir = vim.fn.stdpath("data") .. "/databases"
 
 ---@class CheatDB:sqlite_db
 ---@field state sqlite_tbl
 ---@field cheat sqlite_tbl
 local db = sqlite {
-  uri = dbdir .. "/telescope-cheat.db",
+  uri  = dbdir .. "/" .. name .. ".db",
   state = {
-    id = "number",
+    id      = "number",
     version = "number",
   },
   cheat = {
-    id = { "integer", "primary", "key" },
-    source = "text",
-    ns = "text",
+    id      = { "integer", "primary", "key" },
+    source  = "text",
+    ns      = "text",
     keyword = "text",
     content = "text",
-    ft = "text",
+    ft      = "text",
   },
   opt = {
     lazy = true,
@@ -49,24 +50,30 @@ function state:change_version()
   }
 end
 
+local messages = {
+    caching   = name .. ": caching databases ... ",
+    recaching = name .. ": recaching databases ... ",
+    success   = name .. ": databases has been successfully cached!",
+}
+
 function data:seed(cb)
-  print "telescope-cheat.nvim: caching databases ........................ "
-  return raw.get(function(rows)
-    self:insert(rows)
-    print "telescope-cheat.nvim: databases has been successfully cached."
-    cb()
-  end)
+    print(messages.caching)
+    return raw.get(function(rows)
+        self:insert(rows)
+        print(messages.success)
+        cb()
+    end)
 end
 
 function data:recache(cb)
-  print "telescope-cheat.nvim: recaching databases ...................... "
-  return raw.get(function(rows)
-    print "telescope-cheat.nvim: databases has been successfully recached."
-    self:replace(rows)
-    if cb then
-      return cb()
-    end
-  end)
+    print(messages.recaching)
+    return raw.get(function(rows)
+        print(messages.success)
+        self:replace(rows)
+        if cb then
+            return cb()
+        end
+    end)
 end
 
 function data:ensure(cb)
