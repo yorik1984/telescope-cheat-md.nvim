@@ -1,6 +1,19 @@
-# telescope-cheat-md.nvim
+# 📑 telescope-cheat-md.nvim
 
-### 🌟 Features
+<!-- TOC -->
+
+## Table of Contents
+
+- [🌟 Features](#-features)
+- [✅ Requirements](#-requirements)
+- [📦 Installation](#-installation)
+- [🚀 Usage](#-usage)
+  - [💻 Commands](#-commands)
+- [🎹 Keymaps](#-keymaps)
+
+<!-- /TOC -->
+
+## 🌟 Features
 
 An attempt to recreate cheat.sh with lua, neovim, `sqlite.lua` and `telescope.nvim`.
 
@@ -10,14 +23,14 @@ Using for markdown-type source only:
 
 ![](./preview.gif)
 
-### ⚡️Requirements
+## ✅ Requirements
 
 - Neovim 0.10+
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
 - [sqlite.lua](https://github.com/kkharji/sqlite.lua)
 - [plenary.nvim](https://github.com/nvim-lua/plenary.nvim)
 
-### 📦 Installation
+## 📦 Installation
 
 Install via your favorite package manager:
 
@@ -43,15 +56,15 @@ require("lazy").setup(
 )
 ```
 
-### 🚀 Usage
+## 🚀 Usage
 
-#### 💻 Commands
+### 💻 Commands
 
 ```vim
 :Telescope cheat_md fd
 :Telescope cheat_md recache " cheat will be auto cached with new updates on sources
 ```
-#### ⌨️ Keymaps
+## 🎹 Keymaps
 
 Use [Telescope Default Mappings](https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#default-mappings)
 
