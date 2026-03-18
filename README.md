@@ -1,3 +1,7 @@
+<a href="https://dotfyle.com/plugins/yorik1984/telescope-cheat-md.nvim">
+	<img src="https://dotfyle.com/plugins/yorik1984/telescope-cheat-md.nvim/shield?style=flat" />
+</a>
+
 # 📑 telescope-cheat-md.nvim
 
 <!-- TOC -->
